@@ -6,5 +6,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(6700, () => {
-  console.log(`server listening on port 6000`);
+  console.log(`server listening on port 6700`);
 });
