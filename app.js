@@ -1,4 +1,5 @@
 const express = require('express');
+const connectDB = require('./src/config/database')
 const app = express();
 const {adminAuth} = require('./src/middlewares/auth')
 
@@ -24,6 +25,11 @@ app.use("/", (req, res) => {
   res.send("hello use");
 });
 
-app.listen(6700, () => {
-  console.log(`server listening on port 6700`);
-});
+connectDB().then((res)=>{
+  app.listen(6700, () => {  
+    console.log(`server listening on port 6700`);
+  });
+}).catch((err)=>{
+  console.log("failed to connect db ",err);
+})
+
