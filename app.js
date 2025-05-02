@@ -1,29 +1,25 @@
 const express = require('express');
-const connectDB = require('./src/config/database')
+const connectDB = require('./src/config/database');
+const User = require('./src/models/user');
 const app = express();
-const {adminAuth} = require('./src/middlewares/auth')
 
-app.use('/admin',adminAuth)
-app.get("/admin/:name/:age", (req, res) => {
-  res.send({name:req.params.name,age:req.params.age,comment:req.query.comment});
-});
+app.post('/signup',async (req, res)=>{
+  const user = new User({
+    firstName:"virat",
+    lastName:"kohli",
+    email:"virat@kohli123.com",
+    password:"virat@123",
+    age:34,
+    gender:"male"
+  });
 
-app.get("/user", (req, res) => {
-  res.send({name:"admin",age:23});
-});
-
-app.post("/user", (req, res) => {
-//   res.send(`user posted a comment : ${req.body.comment}`);  //TODO
-  res.send(`user posted a comment.`);
-});
-
-app.delete("/user", (req, res) => {
-  res.send("deleted");
-});
-
-app.use("/", (req, res) => {
-  res.send("hello use");
-});
+  try{
+    await user.save();
+    res.send("user added successfully!!!");
+  } catch(err){
+    res.status(400).send("unable to save user :",err.message)
+  }
+})
 
 connectDB().then((res)=>{
   app.listen(6700, () => {  
